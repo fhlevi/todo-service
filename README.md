@@ -31,7 +31,7 @@ todo-service/
 ### Installation
 
 ```bash
-git clone https://github.com/yourusername/todo-service.git
+git clone https://github.com/fhlevi/todo-service.git
 cd todo-service
 go mod tidy
 go run main.go

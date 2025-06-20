@@ -68,6 +68,3 @@ The server will start on `http://localhost:8000`
 }
 ```
 
-### Release Link
-
-[Preview Link](https://todo-alpha-list.vercel.app/)

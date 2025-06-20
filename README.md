@@ -67,3 +67,7 @@ The server will start on `http://localhost:8000`
   "date": "Monday, May 26, 2025 at 12:30 PM"
 }
 ```
+
+### Release Link
+
+[Preview Link](https://todo-alpha-list.vercel.app/)

@@ -21,6 +21,14 @@ func NewTodoController(service service.Service) *TodoController {
 }
 
 // RegisterRoutes registers the routes for the TodoController.
+// GetTodos godoc
+// @Summary      Get all todos
+// @Description  Retrieve all todo items
+// @Tags         todos
+// @Produce      json
+// @Success      200  {array}  model.Todo
+// @Failure      500  {string} string "Error retrieving todos"
+// @Router       /api/v1/todos [get]
 func (c *TodoController) GetTodos(w http.ResponseWriter, r *http.Request) {
 	todos, err := c.service.GetTodos()
 	if err != nil {
@@ -31,6 +39,15 @@ func (c *TodoController) GetTodos(w http.ResponseWriter, r *http.Request) {
 }
 
 // GetTodoByID retrieves a todo item by its ID.
+// GetTodoByID godoc
+// @Summary      Get todo by ID
+// @Description  Retrieve a todo item by its ID
+// @Tags         todos
+// @Produce      json
+// @Param        id   path      string  true  "Todo ID"
+// @Success      200  {object}  model.Todo
+// @Failure      404  {string}  string "Todo not found"
+// @Router       /api/v1/todos/{id} [get]
 func (c *TodoController) GetTodoByID(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	todo, err := c.service.GetTodoByID(params["id"])
@@ -42,11 +59,19 @@ func (c *TodoController) GetTodoByID(w http.ResponseWriter, r *http.Request) {
 }
 
 // CreateTodo creates a new todo item.
+// CreateTodo godoc
+// @Summary      Create a new todo
+// @Description  Create a new todo item
+// @Tags         todos
+// @Accept       json
+// @Produce      json
+// @Param        request  body   model.TodoRequest  true  "Todo to create"
+// @Success      200   {object}  model.Todo
+// @Failure      400   {string}  string "Invalid request"
+// @Failure      500   {string}  string "Error creating todo"
+// @Router       /api/v1/todos [post]
 func (c *TodoController) CreateTodo(w http.ResponseWriter, r *http.Request) {
-	var req struct {
-		Todo string `json:"todo"`
-	}
-	
+	var req model.TodoRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil || req.Todo == "" {
 		http.Error(w, "Invalid request", http.StatusBadRequest)
 		return
@@ -67,6 +92,17 @@ func (c *TodoController) CreateTodo(w http.ResponseWriter, r *http.Request) {
 }
 
 // UpdateTodo updates an existing todo item.
+// UpdateTodo godoc
+// @Summary      Update a todo
+// @Description  Update an existing todo item
+// @Tags         todos
+// @Accept       json
+// @Produce      json
+// @Param        id    path      string      true  "Todo ID"
+// @Param        todo  body      model.TodoRequest  true  "Todo to update"
+// @Success      200   {object}  model.Todo
+// @Failure      404   {string}  string "Todo not found"
+// @Router       /api/v1/todos/{id} [put]
 func (c *TodoController) UpdateTodo(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	var todo model.Todo
@@ -80,6 +116,15 @@ func (c *TodoController) UpdateTodo(w http.ResponseWriter, r *http.Request) {
 }
 
 // DeleteTodo deletes a todo item by its ID.
+// DeleteTodo godoc
+// @Summary      Delete a todo
+// @Description  Delete a todo item by its ID
+// @Tags         todos
+// @Produce      json
+// @Param        id   path      string  true  "Todo ID"
+// @Success      200  {object}  model.Todo
+// @Failure      404  {string}  string "Todo not found"
+// @Router       /api/v1/todos/{id} [delete]
 func (c *TodoController) DeleteTodo(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 

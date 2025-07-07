@@ -1,0 +1,144 @@
+definitions:
+  model.Todo:
+    properties:
+      date:
+        type: string
+      id:
+        type: string
+      todo:
+        type: string
+    type: object
+  model.TodoRequest:
+    properties:
+      todo:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: Todo Service
+  version: "1.0"
+paths:
+  /api/v1/todos:
+    get:
+      description: Retrieve all todo items
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Todo'
+            type: array
+        "500":
+          description: Error retrieving todos
+          schema:
+            type: string
+      summary: Get all todos
+      tags:
+      - todos
+    post:
+      consumes:
+      - application/json
+      description: Create a new todo item
+      parameters:
+      - description: Todo to create
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.TodoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Todo'
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "500":
+          description: Error creating todo
+          schema:
+            type: string
+      summary: Create a new todo
+      tags:
+      - todos
+  /api/v1/todos/{id}:
+    delete:
+      description: Delete a todo item by its ID
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Todo'
+        "404":
+          description: Todo not found
+          schema:
+            type: string
+      summary: Delete a todo
+      tags:
+      - todos
+    get:
+      description: Retrieve a todo item by its ID
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Todo'
+        "404":
+          description: Todo not found
+          schema:
+            type: string
+      summary: Get todo by ID
+      tags:
+      - todos
+    put:
+      consumes:
+      - application/json
+      description: Update an existing todo item
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Todo to update
+        in: body
+        name: todo
+        required: true
+        schema:
+          $ref: '#/definitions/model.TodoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Todo'
+        "404":
+          description: Todo not found
+          schema:
+            type: string
+      summary: Update a todo
+      tags:
+      - todos
+swagger: "2.0"

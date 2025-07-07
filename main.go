@@ -9,8 +9,11 @@ import (
 	"todo-service/repository"
 	"todo-service/service"
 	"github.com/rs/cors"
+    _ "todo-service/docs" 
 )
 
+// @title Todo Service
+// @version 1.0
 func main() {
 	config.Init() // Initialize configuration
 

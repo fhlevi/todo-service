@@ -120,8 +120,17 @@ func (c *TodoController) UpdateTodo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var todo model.Todo
-	_ = json.NewDecoder(r.Body).Decode(&todo)
+	var req model.TodoRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil || req.Todo == "" {
+		http.Error(w, "Invalid request", http.StatusBadRequest)
+		return
+	}
+
+	todo := model.Todo{
+		Todo: req.Todo,
+		Date: time.Now().Format("Monday, January 2, 2006 at 3:04 PM"), // inilah kuncinya
+	}
+
 	updatedTodo, err := c.service.UpdateTodo(id, todo)
 	if err != nil {
 		http.Error(w, "Todo not found", http.StatusNotFound)

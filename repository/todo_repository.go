@@ -6,11 +6,11 @@ type Repository interface {
 	// GetAll retrieves all todo items.
 	GetAll() ([]model.Todo, error)
 	// GetByID retrieves a todo item by its ID.
-	GetByID(id string) (model.Todo, error)
+	GetByID(id int) (model.Todo, error)
 	// Create adds a new todo item.
 	Create(todo model.Todo) (model.Todo, error)
 	// Update modifies an existing todo item.
-	Update(id string, todo model.Todo) (model.Todo, error)
+	Update(id int, todo model.Todo) (model.Todo, error)
 	// Delete removes a todo item by its ID.
-	Delete(id string) error
+	Delete(id int) error
 }

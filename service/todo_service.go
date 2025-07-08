@@ -8,10 +8,10 @@ import (
 // Service interface defines the contract for the Todo service
 type Service interface {
 	GetTodos() ([]model.Todo, error)
-	GetTodoByID(id string) (model.Todo, error)
+	GetTodoByID(id int) (model.Todo, error)
 	CreateTodo(todo model.Todo) (model.Todo, error)
-	UpdateTodo(id string, todo model.Todo) (model.Todo, error)
-	DeleteTodo(id string) error
+	UpdateTodo(id int, todo model.Todo) (model.Todo, error)
+	DeleteTodo(id int) error
 }
 
 // todoService implements the Service interface for managing Todo items.
@@ -30,7 +30,7 @@ func (s *todoService) GetTodos() ([]model.Todo, error) {
 }
 
 // GetTodoByID retrieves a todo item by its ID from the repository.
-func (s *todoService) GetTodoByID(id string) (model.Todo, error) {
+func (s *todoService) GetTodoByID(id int) (model.Todo, error) {
 	return s.repo.GetByID(id)
 }
 
@@ -40,11 +40,11 @@ func (s *todoService) CreateTodo(todo model.Todo) (model.Todo, error) {
 }
 
 // UpdateTodo modifies an existing todo item in the repository.
-func (s *todoService) UpdateTodo(id string, todo model.Todo) (model.Todo, error) {
+func (s *todoService) UpdateTodo(id int, todo model.Todo) (model.Todo, error) {
 	return s.repo.Update(id, todo)
 }
 
 // DeleteTodo removes a todo item by its ID from the repository.
-func (s *todoService) DeleteTodo(id string) error {
+func (s *todoService) DeleteTodo(id int) error {
 	return s.repo.Delete(id)
 }

@@ -1,56 +1,88 @@
 package repository
 
 import (
+	"database/sql"
 	"errors"
 	"todo-service/model"
 )
 
 type TodoRepository struct {
-	todos []model.Todo
+	DB *sql.DB
 }
 
-func NewTodoRepository() Repository {
-	return &TodoRepository{}
+func NewTodoRepository(db *sql.DB) Repository {
+	return &TodoRepository{DB: db}
 }
 
 func (r *TodoRepository) GetAll() ([]model.Todo, error) {
-	reversedTodos := make([]model.Todo, len(r.todos))
-    for i, item := range r.todos {
-        reversedTodos[len(r.todos)-1-i] = item
-    }
-    return reversedTodos, nil
-}
-
-func (r *TodoRepository) GetByID(id string) (model.Todo, error) {
-	for _, item := range r.todos {
-		if item.ID == id {
-			return item, nil
-		}
+	rows, err := r.DB.Query("SELECT id, todo, date FROM playing_with_leapcell ORDER BY date DESC")
+	if err != nil {
+		return nil, err
 	}
-	return model.Todo{}, errors.New("todo not found")
+	defer rows.Close()
+
+	var todos []model.Todo
+	for rows.Next() {
+		var todo model.Todo
+		if err := rows.Scan(&todo.ID, &todo.Todo, &todo.Date); err != nil {
+			return nil, err
+		}
+		todos = append(todos, todo)
+	}
+	return todos, nil
 }
 
-func (r *TodoRepository) Create(todo model.Todo) (model.Todo, error) {
-	r.todos = append(r.todos, todo)
+func (r *TodoRepository) GetByID(id int) (model.Todo, error) {
+	var todo model.Todo
+	err := r.DB.QueryRow("SELECT id, todo, date FROM playing_with_leapcell WHERE id = $1", id).Scan(&todo.ID, &todo.Todo, &todo.Date)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return model.Todo{}, errors.New("todo not found")
+		}
+		return model.Todo{}, err
+	}
 	return todo, nil
 }
 
-func (r *TodoRepository) Update(id string, todo model.Todo) (model.Todo, error) {
-	for i, item := range r.todos {
-		if item.ID == id {
-			r.todos[i].Todo = todo.Todo
-			return r.todos[i], nil
-		}
+func (r *TodoRepository) Create(todo model.Todo) (model.Todo, error) {
+	err := r.DB.QueryRow(
+		"INSERT INTO playing_with_leapcell (todo, date) VALUES ($1, $2) RETURNING id",
+		todo.Todo, todo.Date,
+	).Scan(&todo.ID)
+
+	if err != nil {
+		return model.Todo{}, err
 	}
-	return model.Todo{}, errors.New("todo not found")
+	return todo, nil
 }
 
-func (r *TodoRepository) Delete(id string) error {
-	for i, item := range r.todos {
-		if item.ID == id {
-			r.todos = append(r.todos[:i], r.todos[i+1:]...)
-			return nil
-		}
+func (r *TodoRepository) Update(id int, todo model.Todo) (model.Todo, error) {
+	result, err := r.DB.Exec("UPDATE playing_with_leapcell SET todo = $1, date = $2 WHERE id = $3", todo.Todo, todo.Date, id)
+	if err != nil {
+		return model.Todo{}, err
 	}
-	return errors.New("todo not found")
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return model.Todo{}, err
+	}
+	if rowsAffected == 0 {
+		return model.Todo{}, errors.New("todo not found")
+	}
+	todo.ID = id
+	return todo, nil
+}
+
+func (r *TodoRepository) Delete(id int) error {
+	result, err := r.DB.Exec("DELETE FROM playing_with_leapcell WHERE id = $1", id)
+	if err != nil {
+		return err
+	}
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if rowsAffected == 0 {
+		return errors.New("todo not found")
+	}
+	return nil
 }

@@ -7,7 +7,8 @@ import (
 	"todo-service/service"
 	"github.com/gorilla/mux"
 	"time"
-	"github.com/google/uuid"
+	// "github.com/google/uuid"
+	"strconv"
 )
 
 // TodoController handles HTTP requests for todo items.
@@ -32,7 +33,7 @@ func NewTodoController(service service.Service) *TodoController {
 func (c *TodoController) GetTodos(w http.ResponseWriter, r *http.Request) {
 	todos, err := c.service.GetTodos()
 	if err != nil {
-		http.Error(w, "Error retrieving todos", http.StatusInternalServerError)
+		http.Error(w, "Error retrieving todos: " + err.Error(), http.StatusInternalServerError)
 		return
 	}
 	json.NewEncoder(w).Encode(todos)
@@ -50,7 +51,14 @@ func (c *TodoController) GetTodos(w http.ResponseWriter, r *http.Request) {
 // @Router       /api/v1/todos/{id} [get]
 func (c *TodoController) GetTodoByID(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	todo, err := c.service.GetTodoByID(params["id"])
+
+	id, err := strconv.Atoi(params["id"])
+	if err != nil {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		return
+	}
+
+	todo, err := c.service.GetTodoByID(id)
 	if err != nil {
 		http.Error(w, "Todo not found", http.StatusNotFound)
 		return
@@ -78,14 +86,14 @@ func (c *TodoController) CreateTodo(w http.ResponseWriter, r *http.Request) {
 	}
 	
 	todo := model.Todo{
-		ID:   uuid.New().String(), // generate UUID
+		// ID:   uuid.New().String(), // generate UUID
 		Todo: req.Todo,
 		Date: time.Now().Format("Monday, January 2, 2006 at 3:04 PM"),
 	}
 
 	createdTodo, err := c.service.CreateTodo(todo)
 	if err != nil {
-		http.Error(w, "Error creating todo", http.StatusInternalServerError)
+		http.Error(w, "Error creating todo: " + err.Error(), http.StatusInternalServerError)
 		return
 	}
 	json.NewEncoder(w).Encode(createdTodo)
@@ -105,9 +113,16 @@ func (c *TodoController) CreateTodo(w http.ResponseWriter, r *http.Request) {
 // @Router       /api/v1/todos/{id} [put]
 func (c *TodoController) UpdateTodo(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
+
+	id, err := strconv.Atoi(params["id"])
+	if err != nil {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		return
+	}
+
 	var todo model.Todo
 	_ = json.NewDecoder(r.Body).Decode(&todo)
-	updatedTodo, err := c.service.UpdateTodo(params["id"], todo)
+	updatedTodo, err := c.service.UpdateTodo(id, todo)
 	if err != nil {
 		http.Error(w, "Todo not found", http.StatusNotFound)
 		return
@@ -128,15 +143,21 @@ func (c *TodoController) UpdateTodo(w http.ResponseWriter, r *http.Request) {
 func (c *TodoController) DeleteTodo(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
+	id, err := strconv.Atoi(params["id"])
+	if err != nil {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		return
+	}
+
 	// Retrieve the todo item before deletion
-    todo, err := c.service.GetTodoByID(params["id"])
+    todo, err := c.service.GetTodoByID(id)
     if err != nil {
         http.Error(w, "Todo not found", http.StatusNotFound)
         return
     }
 
 	// Proceed to delete the todo item
-	err = c.service.DeleteTodo(params["id"]);
+	err = c.service.DeleteTodo(id);
 	if err != nil {
 		http.Error(w, "Todo not found", http.StatusNotFound)
 		return

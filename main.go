@@ -16,8 +16,9 @@ import (
 // @version 1.0
 func main() {
 	config.Init() // Initialize configuration
+	config.InitDB() // initialize DB connection
 
-	repo := repository.NewTodoRepository()
+	repo := repository.NewTodoRepository(config.DB)
 	service := service.NewTodoService(repo)
 	controller := controller.NewTodoController(service)
 	r := router.Router(controller)

@@ -24,12 +24,12 @@ func InitDB() {
     // Data Source Name (DSN) untuk koneksi ke database
     connStr := fmt.Sprintf(
         "host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
-        "9qasp5v56q8ckkf5dc.leapcellpool.com", // host
-        "6438",                                // port
-        "leusedqryuuxlitpubjk",                // user
-        "qdgbwcimtlahjcpqjnbkpxalleyrwp",      // password
-        "nhblmryayfqruelbetbb",                // dbname
-        "require",                             // sslmode
+        "9qasp5v56q8ckkf5dc.apn.leapcellpool.com", 	// host
+        "6438",                                		// port
+        "leusedqryuuxlitpubjk",                		// user
+        "qdgbwcimtlahjcpqjnbkpxalleyrwp",      		// password
+        "nhblmryayfqruelbetbb",                		// dbname
+        "require",                             		// sslmode
     )
 
     // Membuka koneksi ke database

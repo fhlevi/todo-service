@@ -26,9 +26,9 @@ func InitDB() {
         "host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
         "9qasp5v56q8ckkf5dc.apn.leapcellpool.com", 	// host
         "6438",                                		// port
-        "leusedqryuuxlitpubjk",                		// user
-        "qdgbwcimtlahjcpqjnbkpxalleyrwp",      		// password
-        "nhblmryayfqruelbetbb",                		// dbname
+        "kfuymccuwjqozuwmgzre",                		// user
+        "toyxnnujnbcrkmllrtviwmzqrfojiz",      		// password
+        "ulbcsxsmnrskzxjtmeyc",                		// dbname
         "require",                             		// sslmode
     )
 

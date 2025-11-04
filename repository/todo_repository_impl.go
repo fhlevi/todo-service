@@ -34,7 +34,7 @@ func (r *TodoRepository) GetAll() ([]model.Todo, error) {
 
 func (r *TodoRepository) GetByID(id int) (model.Todo, error) {
 	var todo model.Todo
-	err := r.DB.QueryRow("SELECT id, todo, date FROM playing_with_leapcell WHERE id = $1", id).Scan(&todo.ID, &todo.Todo, &todo.Date)
+	err := r.DB.QueryRow("SELECT id, todo, date FROM todo WHERE id = $1", id).Scan(&todo.ID, &todo.Todo, &todo.Date)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return model.Todo{}, errors.New("todo not found")
@@ -46,7 +46,7 @@ func (r *TodoRepository) GetByID(id int) (model.Todo, error) {
 
 func (r *TodoRepository) Create(todo model.Todo) (model.Todo, error) {
 	err := r.DB.QueryRow(
-		"INSERT INTO playing_with_leapcell (todo, date) VALUES ($1, $2) RETURNING id",
+		"INSERT INTO todo (todo, date) VALUES ($1, $2) RETURNING id",
 		todo.Todo, todo.Date,
 	).Scan(&todo.ID)
 
@@ -57,7 +57,7 @@ func (r *TodoRepository) Create(todo model.Todo) (model.Todo, error) {
 }
 
 func (r *TodoRepository) Update(id int, todo model.Todo) (model.Todo, error) {
-	result, err := r.DB.Exec("UPDATE playing_with_leapcell SET todo = $1, date = $2 WHERE id = $3", todo.Todo, todo.Date, id)
+	result, err := r.DB.Exec("UPDATE todo SET todo = $1, date = $2 WHERE id = $3", todo.Todo, todo.Date, id)
 	if err != nil {
 		return model.Todo{}, err
 	}
@@ -73,7 +73,7 @@ func (r *TodoRepository) Update(id int, todo model.Todo) (model.Todo, error) {
 }
 
 func (r *TodoRepository) Delete(id int) error {
-	result, err := r.DB.Exec("DELETE FROM playing_with_leapcell WHERE id = $1", id)
+	result, err := r.DB.Exec("DELETE FROM todo WHERE id = $1", id)
 	if err != nil {
 		return err
 	}

@@ -15,7 +15,7 @@ func NewTodoRepository(db *sql.DB) Repository {
 }
 
 func (r *TodoRepository) GetAll() ([]model.Todo, error) {
-	rows, err := r.DB.Query("SELECT id, todo, date FROM playing_with_leapcell ORDER BY id DESC")
+	rows, err := r.DB.Query("SELECT id, todo, date FROM todo ORDER BY id DESC")
 	if err != nil {
 		return nil, err
 	}

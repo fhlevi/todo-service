@@ -6,16 +6,16 @@
         "version": "1.0"
     },
     "paths": {
-        "/api/v1/todos": {
+        "/api/todo": {
             "get": {
                 "description": "Retrieve all todo items",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "todos"
+                    "todo"
                 ],
-                "summary": "Get all todos",
+                "summary": "Get all todo",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -27,7 +27,7 @@
                         }
                     },
                     "500": {
-                        "description": "Error retrieving todos",
+                        "description": "Error retrieving todo",
                         "schema": {
                             "type": "string"
                         }
@@ -43,7 +43,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "todos"
+                    "todo"
                 ],
                 "summary": "Create a new todo",
                 "parameters": [

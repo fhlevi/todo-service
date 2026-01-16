@@ -1,11 +1,10 @@
 
-# Go Microservice Todo API
+# Go Todo API
 
-This project is a simple Todo List REST API built with Go, demonstrating a microservices architecture. It includes a `todo-service` for handling business logic and an `api-gateway` to manage and route incoming requests.
+This project is a simple Todo List REST API built with Go.
 
 ## ✨ Features
 
-- **Microservices Architecture**: Separates concerns between the API gateway and the todo service.
 - **RESTful Endpoints**: Provides clean and predictable endpoints for CRUD operations.
 - **Dockerized**: Easily run the entire application with a single `docker-compose` command.
 - **CORS Support**: Pre-configured to allow requests from any origin.
@@ -15,9 +14,17 @@ This project is a simple Todo List REST API built with Go, demonstrating a micro
 
 ```
 .
-├── api-gateway/      # Handles request routing and exposes the public API
-├── todo-service/     # Manages the core business logic for todos
-├── docker-compose.yml  # Orchestrates the services
+├── database/
+├── docs/
+├── handlers/
+├── models/
+├── services/
+├── .gitignore
+├── docker-compose.yml
+├── Dockerfile
+├── go.mod
+├── go.sum
+├── main.go
 └── README.md
 ```
 
@@ -40,11 +47,9 @@ This project is a simple Todo List REST API built with Go, demonstrating a micro
     docker-compose up --build
     ```
 
-The API gateway will be available at `http://localhost:3000`.
+The API will be available at `http://localhost:3000`.
 
 ## 🔧 API Endpoints
-
-All endpoints are available through the API gateway.
 
 | Method | Endpoint         | Description          |
 |--------|------------------|----------------------|
@@ -76,8 +81,9 @@ A Swagger UI is available to visualize and interact with the API's resources.
 {
   "id": 1,
   "todo": "Go to the gym",
-  "date": "Tuesday, January 13, 2026 at 10:00 AM"
+  "date": "2026-01-13T10:00:00Z"
 }
 ```
+
 
 

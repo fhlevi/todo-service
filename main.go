@@ -10,12 +10,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const (
+	todoBasePath = "/todo"
+	todoIDPath   = "/todo/:id"
+)
+
 func main() {
 	database.Init()
 
 	r := gin.Default()
-
-	r.RedirectTrailingSlash = false
 
 	// CORS middleware
 	r.Use(func(c *gin.Context) {
@@ -56,13 +59,13 @@ func main() {
 	})
 
 	// Todo routes
-	todo := r.Group("/api/todo")
+	todo := r.Group("/api")
 	{
-		todo.GET("/", handlers.GetTodos)
-		todo.POST("/", handlers.CreateTodo)
-		todo.GET("/:id", handlers.GetTodoByID)
-		todo.PUT("/:id", handlers.UpdateTodo)
-		todo.DELETE("/:id", handlers.DeleteTodo)
+		todo.GET(todoBasePath, handlers.GetTodos)
+		todo.POST(todoBasePath, handlers.CreateTodo)
+		todo.GET(todoIDPath, handlers.GetTodoByID)
+		todo.PUT(todoIDPath, handlers.UpdateTodo)
+		todo.DELETE(todoIDPath, handlers.DeleteTodo)
 	}
 
 	port := getEnv("PORT", "8080")

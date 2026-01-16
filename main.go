@@ -10,10 +10,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const (
-	todoBasePath = "/todo"
-	todoIDPath   = "/todo/:id"
-)
+const todoBasePath = "/todo"
+const todoIDPath   = "/todo/:id"
 
 func main() {
 	database.Init()

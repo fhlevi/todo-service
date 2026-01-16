@@ -15,6 +15,8 @@ func main() {
 
 	r := gin.Default()
 
+	r.RedirectTrailingSlash = false
+
 	// CORS middleware
 	r.Use(func(c *gin.Context) {
 		// Set header CORS sebelum request diproses
@@ -57,8 +59,8 @@ func main() {
 	todo := r.Group("/api/todo")
 	{
 		todo.GET("/", handlers.GetTodos)
-		todo.GET("/:id", handlers.GetTodoByID)
 		todo.POST("/", handlers.CreateTodo)
+		todo.GET("/:id", handlers.GetTodoByID)
 		todo.PUT("/:id", handlers.UpdateTodo)
 		todo.DELETE("/:id", handlers.DeleteTodo)
 	}

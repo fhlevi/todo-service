@@ -17,12 +17,14 @@ func main() {
 
 	// CORS middleware
 	r.Use(func(c *gin.Context) {
-		c.Header("Access-Control-Allow-Origin", "*")
-		c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH")
-		c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization, Accept")
-		c.Header("Access-Control-Expose-Headers", "Content-Length")
-		c.Header("Access-Control-Max-Age", "43200") // 12 hours
+		// Set header CORS sebelum request diproses
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization, Accept, X-Requested-With")
+		c.Writer.Header().Set("Access-Control-Expose-Headers", "Content-Length")
+		c.Writer.Header().Set("Access-Control-Max-Age", "43200")
 		
+		// Handle preflight OPTIONS request
 		if c.Request.Method == "OPTIONS" {
 			c.AbortWithStatus(204)
 			return
